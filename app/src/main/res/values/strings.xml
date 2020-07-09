@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Almacen</string>
+    <string name="almacen">Revisión Almacen</string>
+    <string name="registro">Registrar cliente</string>
+    <string name="consulta_clientes">Consultar clientes</string>
+    <string name="clientes">CLIENTES</string>
+    <string name="buscar_lb">Buscar...</string>
+    <string name="guardar">Guardar</string>
+    <string name="digite_nombre">Digite nombre de la persona</string>
+    <string name="registro_tarifa">REGISTRAR PERSONA</string>
+    <string name="digite_tope">Digite el tome maximo para soltar</string>
+    <string name="digite_saldo">Saldo de la persona actual</string>
+    <string name="digite_telefono">Digite el telefono</string>
+    <string name="digite_referencia">Referencia o por quien fue recomendado</string>
+    <string name="digite_detalle">Detalles adicionales</string>
+    <string name="agregar_persona">Agregar Persona</string>
+    <string name="requerido">Campo requerido</string>
+    <string name="successfully">Se agrego correctamente la persona</string>
+    <string name="sin_personas">No existe personas</string>
+    <string name="personas">Personas</string>
+</resources>
