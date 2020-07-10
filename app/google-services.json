@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "443475954200",
+    "firebase_url": "https://almacen-84dbf.firebaseio.com",
+    "project_id": "almacen-84dbf",
+    "storage_bucket": "almacen-84dbf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443475954200:android:6c316db54483ad7ff8116d",
+        "android_client_info": {
+          "package_name": "co.com.pilae.almacen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443475954200-5j003u896h64l80j7dop10rm3tslp0ag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOPFQxFoVOLIfQ00DF6sOpBYpT1oAk34U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "443475954200-5j003u896h64l80j7dop10rm3tslp0ag.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

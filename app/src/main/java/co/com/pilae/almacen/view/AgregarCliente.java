@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.com.pilae.almacen.R;
@@ -29,7 +32,7 @@ public class AgregarCliente extends AppCompatActivity {
     public EditText txtSaldo;
     @BindView(R.id.txtTelefono)
     public EditText txtTelefono;
-
+    private DatabaseReference databaseReference;
 
     private ActionBarUtil actionBarUtil;
     @Override
@@ -46,6 +49,7 @@ public class AgregarCliente extends AppCompatActivity {
     }
 
     public void guardar(View view) {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         String nombre = txtNombre.getText().toString();
         String detalle = txtDetalle.getText().toString();
         String referencia = txtReferencia.getText().toString();
@@ -53,8 +57,9 @@ public class AgregarCliente extends AppCompatActivity {
         String telefono = txtTelefono.getText().toString();
         Double tope = toDouble(txtTopeMaximo.getText().toString());
         if (validarInformacion(nombre, detalle,referencia,saldo,telefono,tope)) {
-            Persona tarifa = getPersona(nombre, detalle,referencia,saldo,telefono,tope);
-            new InsercionPersona().execute(tarifa);
+            Persona persona = getPersona(nombre, detalle,referencia,saldo,telefono,tope);
+            databaseReference.child("personas").push().setValue(persona);
+            new InsercionPersona().execute(persona);
             finish();
         }
     }

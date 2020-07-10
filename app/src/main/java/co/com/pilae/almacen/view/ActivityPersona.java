@@ -1,5 +1,6 @@
 package co.com.pilae.almacen.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,7 +13,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,6 +40,7 @@ public class ActivityPersona extends AppCompatActivity {
     public EditText txtBuscar;
     List<Persona> personas = new ArrayList<>();
     private PersonaAdapter personaAdapter;
+    private DatabaseReference databaseReference;
     DataBaseHelper db;
 
 
@@ -49,13 +58,48 @@ public class ActivityPersona extends AppCompatActivity {
 
 
     private void loadPersonas() {
-        personas = db.getPersonaDao().listar();
+        personas = new ArrayList<>();
+        databaseReference.child("personas").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String nombre  = ds.child("nombre").getValue().toString();
+                        String numeroTelefono  = ds.child("numeroTelefono").getValue().toString();
+                        String saldo  = ds.child("saldo").getValue().toString();
+                        //String nombre  = ds.child("nombre").getValue().toString();
+                        personas.add(buildPerson(nombre,numeroTelefono,saldo));
+                    }
+                    loadAdapter();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //personas = db.getPersonaDao().listar();
+
+    }
+
+    private void loadAdapter() {
         personaAdapter = new PersonaAdapter(this,personas);
         listViewPersonas.setAdapter(personaAdapter);
     }
 
+    private Persona buildPerson(String nombre, String numeroTelefono, String saldo) {
+        Persona persona = new Persona();
+        persona.setNombre(nombre);
+        persona.setNumeroTelefono(numeroTelefono);
+        persona.setSaldo(Double.valueOf(saldo));
+        return persona;
+    }
+
 
     private void initComponents() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         db = DataBaseHelper.getDBMainThread(this);
         actionBarUtil = new ActionBarUtil(this);
         actionBarUtil.setToolBar(getString(R.string.personas));
