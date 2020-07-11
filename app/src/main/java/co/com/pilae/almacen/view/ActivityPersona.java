@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -28,7 +29,6 @@ import butterknife.ButterKnife;
 import co.com.pilae.almacen.R;
 import co.com.pilae.almacen.adapter.PersonaAdapter;
 import co.com.pilae.almacen.entidades.Persona;
-import co.com.pilae.almacen.persistencia.room.DataBaseHelper;
 import co.com.pilae.almacen.utilidades.ActionBarUtil;
 
 public class ActivityPersona extends AppCompatActivity {
@@ -41,7 +41,6 @@ public class ActivityPersona extends AppCompatActivity {
     List<Persona> personas = new ArrayList<>();
     private PersonaAdapter personaAdapter;
     private DatabaseReference databaseReference;
-    DataBaseHelper db;
 
 
     @Override
@@ -52,6 +51,7 @@ public class ActivityPersona extends AppCompatActivity {
         initComponents();
         loadPersonas();
         buscarOnTextListener();
+        onItemClickListener();
     }
 
 
@@ -67,8 +67,8 @@ public class ActivityPersona extends AppCompatActivity {
                         String nombre  = ds.child("nombre").getValue().toString();
                         String numeroTelefono  = ds.child("numeroTelefono").getValue().toString();
                         String saldo  = ds.child("saldo").getValue().toString();
-                        //String nombre  = ds.child("nombre").getValue().toString();
-                        personas.add(buildPerson(nombre,numeroTelefono,saldo));
+                        String id = ds.getKey();
+                        personas.add(buildPerson(nombre,numeroTelefono,saldo,id));
                     }
                     loadAdapter();
                 }
@@ -89,18 +89,18 @@ public class ActivityPersona extends AppCompatActivity {
         listViewPersonas.setAdapter(personaAdapter);
     }
 
-    private Persona buildPerson(String nombre, String numeroTelefono, String saldo) {
+    private Persona buildPerson(String nombre, String numeroTelefono, String saldo,String id) {
         Persona persona = new Persona();
         persona.setNombre(nombre);
         persona.setNumeroTelefono(numeroTelefono);
         persona.setSaldo(Double.valueOf(saldo));
+        persona.setIdFirebase(id);
         return persona;
     }
 
 
     private void initComponents() {
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        db = DataBaseHelper.getDBMainThread(this);
         actionBarUtil = new ActionBarUtil(this);
         actionBarUtil.setToolBar(getString(R.string.personas));
     }
@@ -135,5 +135,19 @@ public class ActivityPersona extends AppCompatActivity {
         });
 
 
+    }
+    private void onItemClickListener() {
+        listViewPersonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), MovimientoActivity.class);
+                intent.putExtra("id", getRateId(position));
+                startActivity(intent);
+            }
+
+            private String getRateId(int position) {
+                return String.valueOf(personas.get(position).getIdFirebase());
+            }
+        });
     }
 }

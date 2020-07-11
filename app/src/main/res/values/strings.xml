@@ -18,4 +18,9 @@
     <string name="successfully">Se agrego correctamente la persona</string>
     <string name="sin_personas">No existe personas</string>
     <string name="personas">Personas</string>
+    <string name="saldo">SALDO:</string>
+    <string name="tope">TOPE:</string>
+    <string name="abonar">Abonar</string>
+    <string name="vender">VENTA</string>
+    <string name="cliente">Cliente</string>
 </resources>

@@ -11,11 +11,15 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.com.pilae.almacen.R;
+import co.com.pilae.almacen.entidades.Movimiento;
 import co.com.pilae.almacen.entidades.Persona;
-import co.com.pilae.almacen.persistencia.room.DataBaseHelper;
 import co.com.pilae.almacen.utilidades.ActionBarUtil;
 
 public class AgregarCliente extends AppCompatActivity {
@@ -59,7 +63,6 @@ public class AgregarCliente extends AppCompatActivity {
         if (validarInformacion(nombre, detalle,referencia,saldo,telefono,tope)) {
             Persona persona = getPersona(nombre, detalle,referencia,saldo,telefono,tope);
             databaseReference.child("personas").push().setValue(persona);
-            new InsercionPersona().execute(persona);
             finish();
         }
     }
@@ -71,6 +74,18 @@ public class AgregarCliente extends AppCompatActivity {
         persona.setReferencia(referencia);
         persona.setTope(tope);
         persona.setSaldo(saldo);
+        List<Movimiento> movimientos = new ArrayList<>();
+        Movimiento movimiento = new Movimiento();
+        movimiento.setDescripcion("prueba");
+        movimiento.setFecha("new Date()");
+        movimiento.setValor(234234);
+        Movimiento movimiento2 = new Movimiento();
+        movimiento2.setDescripcion("prueba2");
+        movimiento2.setFecha("new Date()");
+        movimiento2.setValor(12500);
+        movimientos.add(movimiento);
+        movimientos.add(movimiento2);
+        persona.setMovimientos(movimientos);
         return persona;
     }
     private boolean validarInformacion(String nombre, String detalle, String referencia, Double saldo, String telefono, Double tope) {
@@ -105,21 +120,6 @@ public class AgregarCliente extends AppCompatActivity {
     private Double toDouble(String valor) {
         return "".equals(valor) ? 0 : Double.parseDouble(valor);
     }
-    private class InsercionPersona extends AsyncTask<Persona, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Persona... personas) {
-            DataBaseHelper.getSimpleDB(getApplicationContext()).getPersonaDao().insert(personas[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Toast.makeText(getApplicationContext(), getString(R.string.successfully), Toast.LENGTH_SHORT).show();
-            super.onPostExecute(aVoid);
-        }
-    }
-
 
     @Override
     public boolean onSupportNavigateUp() {
